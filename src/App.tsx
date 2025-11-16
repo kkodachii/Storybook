@@ -23,11 +23,6 @@ const defaultBook: Book = {
 };
 
 function App() {
-  const handleBuyNow = () => {
-    // Navigate to purchase page or open purchase modal
-    alert('Redirecting to purchase page...');
-  };
-
   return (
     <BrowserRouter>
       <Routes>

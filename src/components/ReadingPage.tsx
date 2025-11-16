@@ -91,12 +91,6 @@ export default function ReadingPage({ book }: ReadingPageProps) {
     return () => window.removeEventListener('keydown', handleKeyPress);
   }, [totalPages, goToNextPage, goToPreviousPage]);
 
-  const goToPage = (pageIndex: number) => {
-    if (pageIndex >= 0 && pageIndex < totalPages) {
-      setCurrentPage(pageIndex);
-    }
-  };
-
   // Touch handlers for swipe
   const onTouchStart = (e: React.TouchEvent) => {
     touchEndX.current = null;
