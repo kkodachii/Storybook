@@ -52,7 +52,7 @@ function App() {
             <BookDetails
               book={defaultBook}
               onReadStory={handleReadStory}
-              onBuyNow={handleBuyNow}
+            
             />
           }
         />

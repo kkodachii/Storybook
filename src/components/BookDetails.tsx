@@ -9,10 +9,9 @@ import frontCover from '../Images/story_essentials/front_cover.png';
 interface BookDetailsProps {
   book: Book;
   onReadStory?: () => void;
-  onBuyNow?: () => void;
 }
 
-export default function BookDetails({ book, onReadStory, onBuyNow }: BookDetailsProps) {
+export default function BookDetails({ book, onReadStory }: BookDetailsProps) {
   const navigate = useNavigate();
   const [isSinopsisOpen, setIsSinopsisOpen] = useState(false);
   const [isCreditsOpen, setIsCreditsOpen] = useState(false);
