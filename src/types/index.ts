@@ -19,4 +19,7 @@ export interface Book {
   date: string;
   synopsis: string;
   coverImage?: string;
+  readingLevel?: string;
+  pages?: number;
+  availableLanguages?: number;
 }

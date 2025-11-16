@@ -8,9 +8,10 @@ interface LandingPageProps {
   book: Book;
   onReadStory?: () => void;
   onBuyNow?: () => void;
+  onSeeMore?: () => void;
 }
 
-export default function LandingPage({ book, onBuyNow }: LandingPageProps) {
+export default function LandingPage({ book, onBuyNow, onSeeMore }: LandingPageProps) {
   const [currentBook, setCurrentBook] = useState<Book>(book);
 
   useEffect(() => {
@@ -40,7 +41,7 @@ export default function LandingPage({ book, onBuyNow }: LandingPageProps) {
               {currentBook.genre.split(',').map((genre, index) => (
                 <span
                   key={index}
-                  className="px-3 py-1 bg-yellow-500/90 hover:bg-yellow-500 border border-yellow-400/50 text-white text-sm font-semibold rounded-full transition-colors"
+                  className="px-4 py-1.5 bg-gradient-to-r from-yellow-500 to-yellow-600 text-white text-sm font-medium rounded-full shadow-md hover:shadow-lg hover:from-yellow-600 hover:to-yellow-700 transition-all duration-200 cursor-default"
                 >
                   {genre.trim()}
                 </span>
@@ -66,6 +67,7 @@ export default function LandingPage({ book, onBuyNow }: LandingPageProps) {
 
               {/* See More Button */}
               <Button
+                onClick={onSeeMore}
                 variant="outline"
                 className="h-12 px-6 bg-white/10 hover:bg-white/20 border-2 border-white/50 backdrop-blur-sm text-white hover:text-white font-semibold flex items-center gap-2 transition-all hover:scale-105"
               >
