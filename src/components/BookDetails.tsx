@@ -8,10 +8,9 @@ import frontCover from '../Images/story_essentials/front_cover.png';
 
 interface BookDetailsProps {
   book: Book;
-  onReadStory?: () => void;
 }
 
-export default function BookDetails({ book, onReadStory }: BookDetailsProps) {
+export default function BookDetails({ book }: BookDetailsProps) {
   const navigate = useNavigate();
   const [isSinopsisOpen, setIsSinopsisOpen] = useState(false);
   const [isCreditsOpen, setIsCreditsOpen] = useState(false);
@@ -121,7 +120,7 @@ export default function BookDetails({ book, onReadStory }: BookDetailsProps) {
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row flex-wrap gap-2 sm:gap-3">
               <Button
-                onClick={onReadStory}
+                onClick={() => navigate('/read')}
                 className="w-full sm:w-auto bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-white border-0 shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105 text-sm sm:text-base"
               >
                 <BookOpen className="mr-2 h-4 w-4" />

@@ -7,11 +7,9 @@ import mainCover from '../Images/story_essentials/main_cover.png';
 
 interface LandingPageProps {
   book: Book;
-  onReadStory?: () => void;
-  onBuyNow?: () => void;
 }
 
-export default function LandingPage({ book, onBuyNow }: LandingPageProps) {
+export default function LandingPage({ book }: LandingPageProps) {
   const navigate = useNavigate();
   const [currentBook, setCurrentBook] = useState<Book>(book);
 
@@ -60,7 +58,7 @@ export default function LandingPage({ book, onBuyNow }: LandingPageProps) {
             <div className="flex items-center justify-end gap-4">
               {/* Read Button */}
               <Button
-                onClick={onBuyNow}
+                onClick={() => navigate('/read')}
                 className="h-14 w-14 rounded-full bg-white/20 hover:bg-white/30 border-2 border-white/50 backdrop-blur-sm flex items-center justify-center p-0 transition-all hover:scale-110"
               >
                 <BookOpen className="h-6 w-6 text-white fill-white" />

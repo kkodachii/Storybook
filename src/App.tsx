@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import LandingPage from './components/LandingPage';
 import BookDetails from './components/BookDetails';
+import ReadingPage from './components/ReadingPage';
 import { Book } from './types';
 
 // Sample book data - in a real app, this would come from an API or state management
@@ -22,11 +23,6 @@ const defaultBook: Book = {
 };
 
 function App() {
-  const handleReadStory = () => {
-    // Navigate to read story page or open modal
-    alert('Opening story reader...');
-  };
-
   const handleBuyNow = () => {
     // Navigate to purchase page or open purchase modal
     alert('Redirecting to purchase page...');
@@ -41,8 +37,6 @@ function App() {
           element={
             <LandingPage
               book={defaultBook}
-              onReadStory={handleReadStory}
-              onBuyNow={handleBuyNow}
             />
           }
         />
@@ -51,8 +45,14 @@ function App() {
           element={
             <BookDetails
               book={defaultBook}
-              onReadStory={handleReadStory}
-            
+            />
+          }
+        />
+        <Route
+          path="/read"
+          element={
+            <ReadingPage
+              book={defaultBook}
             />
           }
         />
