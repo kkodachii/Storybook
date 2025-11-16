@@ -146,11 +146,11 @@ export default function ReadingPage({ book }: ReadingPageProps) {
       </div>
 
       {/* Main Reading Area */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+      <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 py-4 sm:py-8">
         <div className="flex flex-col items-center gap-6">
           {/* Page Image */}
           <div 
-            className="w-full max-w-md"
+            className="w-full max-w-full sm:max-w-md"
             onTouchStart={onTouchStart}
             onTouchMove={onTouchMove}
             onTouchEnd={onTouchEnd}
