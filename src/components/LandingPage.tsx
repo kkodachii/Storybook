@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { BookOpen, Info } from 'lucide-react';
 import { Book } from '@/types';
@@ -8,10 +9,10 @@ interface LandingPageProps {
   book: Book;
   onReadStory?: () => void;
   onBuyNow?: () => void;
-  onSeeMore?: () => void;
 }
 
-export default function LandingPage({ book, onBuyNow, onSeeMore }: LandingPageProps) {
+export default function LandingPage({ book, onBuyNow }: LandingPageProps) {
+  const navigate = useNavigate();
   const [currentBook, setCurrentBook] = useState<Book>(book);
 
   useEffect(() => {
@@ -67,7 +68,7 @@ export default function LandingPage({ book, onBuyNow, onSeeMore }: LandingPagePr
 
               {/* See More Button */}
               <Button
-                onClick={onSeeMore}
+                onClick={() => navigate('/details')}
                 variant="outline"
                 className="h-12 px-6 bg-white/10 hover:bg-white/20 border-2 border-white/50 backdrop-blur-sm text-white hover:text-white font-semibold flex items-center gap-2 transition-all hover:scale-105"
               >

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import LandingPage from './components/LandingPage';
 import BookDetails from './components/BookDetails';
 import { Book } from './types';
@@ -22,9 +22,6 @@ const defaultBook: Book = {
 };
 
 function App() {
-  const [book] = useState<Book>(defaultBook);
-  const [showDetails, setShowDetails] = useState(false);
-
   const handleReadStory = () => {
     // Navigate to read story page or open modal
     alert('Opening story reader...');
@@ -35,32 +32,32 @@ function App() {
     alert('Redirecting to purchase page...');
   };
 
-  const handleSeeMore = () => {
-    setShowDetails(true);
-  };
-
-  const handleBack = () => {
-    setShowDetails(false);
-  };
-
-  if (showDetails) {
-    return (
-      <BookDetails
-        book={book}
-        onBack={handleBack}
-        onReadStory={handleReadStory}
-        onBuyNow={handleBuyNow}
-      />
-    );
-  }
-
   return (
-    <LandingPage
-      book={book}
-      onReadStory={handleReadStory}
-      onBuyNow={handleBuyNow}
-      onSeeMore={handleSeeMore}
-    />
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Navigate to="/home" replace />} />
+        <Route
+          path="/home"
+          element={
+            <LandingPage
+              book={defaultBook}
+              onReadStory={handleReadStory}
+              onBuyNow={handleBuyNow}
+            />
+          }
+        />
+        <Route
+          path="/details"
+          element={
+            <BookDetails
+              book={defaultBook}
+              onReadStory={handleReadStory}
+              onBuyNow={handleBuyNow}
+            />
+          }
+        />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

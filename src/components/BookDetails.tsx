@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { ArrowLeft, BookOpen, CheckCircle, FileText, BookText, Globe, TrendingUp, ChevronDown, ChevronUp } from 'lucide-react';
@@ -7,12 +8,12 @@ import frontCover from '../Images/story_essentials/front_cover.png';
 
 interface BookDetailsProps {
   book: Book;
-  onBack: () => void;
   onReadStory?: () => void;
   onBuyNow?: () => void;
 }
 
-export default function BookDetails({ book, onBack, onReadStory, onBuyNow }: BookDetailsProps) {
+export default function BookDetails({ book, onReadStory, onBuyNow }: BookDetailsProps) {
+  const navigate = useNavigate();
   const [isSinopsisOpen, setIsSinopsisOpen] = useState(false);
   const [isCreditsOpen, setIsCreditsOpen] = useState(false);
   const [isReferencesOpen, setIsReferencesOpen] = useState(false);
@@ -22,7 +23,7 @@ export default function BookDetails({ book, onBack, onReadStory, onBuyNow }: Boo
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-12">
         {/* Back Button */}
         <Button
-          onClick={onBack}
+          onClick={() => navigate('/home')}
           className="mb-4 sm:mb-6 lg:mb-10 bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-white border-0 shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105 text-sm sm:text-base"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
