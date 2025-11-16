@@ -101,6 +101,29 @@ export default function ReadingPage({ book }: ReadingPageProps) {
     }
   }, [isMobile, totalPages, currentPage]);
 
+  // Preload all images for faster loading and caching
+  useEffect(() => {
+    const preloadImages = (imageArray: string[]) => {
+      imageArray.forEach((src) => {
+        const img = new Image();
+        img.src = src;
+        // Store in browser cache by loading the image
+        img.onload = () => {
+          // Image loaded and cached in browser's HTTP cache
+        };
+        img.onerror = () => {
+          // Handle error silently
+        };
+      });
+    };
+
+    // Preload all images in the background
+    // This will cache them in the browser's HTTP cache for faster subsequent loads
+    // The browser will automatically use cached versions on next visit
+    preloadImages(mobilePages);
+    preloadImages(webPages);
+  }, []);
+
   const goToNextPage = useCallback(() => {
     setCurrentPage((prev) => {
       const pages = isMobile ? mobilePages : webPages;
