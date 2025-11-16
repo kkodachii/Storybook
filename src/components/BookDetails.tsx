@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -10,11 +10,26 @@ interface BookDetailsProps {
   book: Book;
 }
 
+const getReadStatusKey = (bookId: string) => `book_read_${bookId}`;
+
 export default function BookDetails({ book }: BookDetailsProps) {
   const navigate = useNavigate();
   const [isSinopsisOpen, setIsSinopsisOpen] = useState(false);
   const [isCreditsOpen, setIsCreditsOpen] = useState(false);
   const [isReferencesOpen, setIsReferencesOpen] = useState(false);
+  const [isMarkedAsRead, setIsMarkedAsRead] = useState(false);
+
+  // Load read status from localStorage on mount
+  useEffect(() => {
+    const readStatus = localStorage.getItem(getReadStatusKey(book.id));
+    setIsMarkedAsRead(readStatus === 'true');
+  }, [book.id]);
+
+  const handleMarkAsRead = () => {
+    const newStatus = !isMarkedAsRead;
+    setIsMarkedAsRead(newStatus);
+    localStorage.setItem(getReadStatusKey(book.id), String(newStatus));
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-yellow-50/30 w-full">
@@ -127,11 +142,16 @@ export default function BookDetails({ book }: BookDetailsProps) {
                 Read
               </Button>
               <Button
-                variant="outline"
-                className="w-full sm:w-auto border-2 border-yellow-300 text-yellow-700 hover:bg-yellow-50 hover:border-yellow-400 hover:text-yellow-700 shadow-sm hover:shadow-md transition-all duration-200 hover:scale-105 text-sm sm:text-base"
+                onClick={handleMarkAsRead}
+                variant={isMarkedAsRead ? "default" : "outline"}
+                className={`w-full sm:w-auto border-2 shadow-sm hover:shadow-md transition-all duration-200 hover:scale-105 text-sm sm:text-base ${
+                  isMarkedAsRead
+                    ? "bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-white border-yellow-500"
+                    : "border-yellow-300 text-yellow-700 hover:bg-yellow-50 hover:border-yellow-400 hover:text-yellow-700"
+                }`}
               >
-                <CheckCircle className="mr-2 h-4 w-4" />
-                Mark as Read
+                <CheckCircle className={`mr-2 h-4 w-4 ${isMarkedAsRead ? "fill-white" : ""}`} />
+                {isMarkedAsRead ? "Marked as Read" : "Mark as Read"}
               </Button>
             </div>
 
