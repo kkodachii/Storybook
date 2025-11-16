@@ -212,7 +212,7 @@ export default function BookDetails({ book }: BookDetailsProps) {
                 >
                   <div className="flex items-center gap-2">
                     <FileText className="h-4 w-4 sm:h-5 sm:w-5 text-yellow-600 flex-shrink-0" />
-                    <span className="text-base sm:text-lg font-bold text-gray-900 text-left">References</span>
+                    <span className="text-base sm:text-lg font-bold text-gray-900 text-left">Mga Sanggunian</span>
                   </div>
                   {isReferencesOpen ? (
                     <ChevronUp className="h-5 w-5 text-yellow-600 flex-shrink-0" />

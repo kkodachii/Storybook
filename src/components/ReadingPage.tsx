@@ -1,68 +1,115 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ArrowLeft, ChevronLeft, ChevronRight, Maximize, Minimize } from 'lucide-react';
 import { Book } from '@/types';
 
-// Import all story page images
-import page1 from '../Images/story_mobile/1.png';
-import page2 from '../Images/story_mobile/2.png';
-import page3 from '../Images/story_mobile/3.png';
-import page4 from '../Images/story_mobile/4.png';
-import page5 from '../Images/story_mobile/5.png';
-import page6 from '../Images/story_mobile/6.png';
-import page7 from '../Images/story_mobile/7.png';
-import page8 from '../Images/story_mobile/8.png';
-import page9 from '../Images/story_mobile/9.png';
-import page10 from '../Images/story_mobile/10.png';
-import page11 from '../Images/story_mobile/11.png';
-import page12 from '../Images/story_mobile/12.png';
-import page13 from '../Images/story_mobile/13.png';
-import page14 from '../Images/story_mobile/14.png';
-import page15 from '../Images/story_mobile/15.png';
-import page16 from '../Images/story_mobile/16.png';
-import page17 from '../Images/story_mobile/17.png';
-import page18 from '../Images/story_mobile/18.png';
-import page19 from '../Images/story_mobile/19.png';
-import page20 from '../Images/story_mobile/20.png';
-import page21 from '../Images/story_mobile/21.png';
-import page22 from '../Images/story_mobile/22.png';
-import page23 from '../Images/story_mobile/23.png';
-import page24 from '../Images/story_mobile/24.png';
-import page25 from '../Images/story_mobile/25.png';
-import page26 from '../Images/story_mobile/26.png';
-import page27 from '../Images/story_mobile/27.png';
-import page28 from '../Images/story_mobile/28.png';
+// Import mobile story page images
+import mobilePage1 from '../Images/story_mobile/1.png';
+import mobilePage2 from '../Images/story_mobile/2.png';
+import mobilePage3 from '../Images/story_mobile/3.png';
+import mobilePage4 from '../Images/story_mobile/4.png';
+import mobilePage5 from '../Images/story_mobile/5.png';
+import mobilePage6 from '../Images/story_mobile/6.png';
+import mobilePage7 from '../Images/story_mobile/7.png';
+import mobilePage8 from '../Images/story_mobile/8.png';
+import mobilePage9 from '../Images/story_mobile/9.png';
+import mobilePage10 from '../Images/story_mobile/10.png';
+import mobilePage11 from '../Images/story_mobile/11.png';
+import mobilePage12 from '../Images/story_mobile/12.png';
+import mobilePage13 from '../Images/story_mobile/13.png';
+import mobilePage14 from '../Images/story_mobile/14.png';
+import mobilePage15 from '../Images/story_mobile/15.png';
+import mobilePage16 from '../Images/story_mobile/16.png';
+import mobilePage17 from '../Images/story_mobile/17.png';
+import mobilePage18 from '../Images/story_mobile/18.png';
+import mobilePage19 from '../Images/story_mobile/19.png';
+import mobilePage20 from '../Images/story_mobile/20.png';
+import mobilePage21 from '../Images/story_mobile/21.png';
+import mobilePage22 from '../Images/story_mobile/22.png';
+import mobilePage23 from '../Images/story_mobile/23.png';
+import mobilePage24 from '../Images/story_mobile/24.png';
+import mobilePage25 from '../Images/story_mobile/25.png';
+import mobilePage26 from '../Images/story_mobile/26.png';
+import mobilePage27 from '../Images/story_mobile/27.png';
+import mobilePage28 from '../Images/story_mobile/28.png';
+
+// Import web story page images (landscape, combined pages)
+import webPage1 from '../Images/story_web/1.png';
+import webPage2 from '../Images/story_web/2.png';
+import webPage3 from '../Images/story_web/3.png';
+import webPage4 from '../Images/story_web/4.png';
+import webPage5 from '../Images/story_web/5.png';
+import webPage6 from '../Images/story_web/6.png';
+import webPage7 from '../Images/story_web/7.png';
+import webPage8 from '../Images/story_web/8.png';
+import webPage9 from '../Images/story_web/9.png';
+import webPage10 from '../Images/story_web/10.png';
+import webPage11 from '../Images/story_web/11.png';
+import webPage12 from '../Images/story_web/12.png';
+import webPage13 from '../Images/story_web/13.png';
 
 interface ReadingPageProps {
   book: Book;
 }
 
-const storyPages = [
-  page1, page2, page3, page4, page5, page6, page7, page8,
-  page9, page10, page11, page12, page13, page14, page15, page16,
-  page17, page18, page19, page20, page21, page22, page23, page24,
-  page25, page26, page27, page28
+const mobilePages = [
+  mobilePage1, mobilePage2, mobilePage3, mobilePage4, mobilePage5, mobilePage6, mobilePage7, mobilePage8,
+  mobilePage9, mobilePage10, mobilePage11, mobilePage12, mobilePage13, mobilePage14, mobilePage15, mobilePage16,
+  mobilePage17, mobilePage18, mobilePage19, mobilePage20, mobilePage21, mobilePage22, mobilePage23, mobilePage24,
+  mobilePage25, mobilePage26, mobilePage27, mobilePage28
+];
+
+const webPages = [
+  mobilePage1, // First page from mobile
+  webPage1, webPage2, webPage3, webPage4, webPage5, webPage6, webPage7, webPage8,
+  webPage9, webPage10, webPage11, webPage12, webPage13,
+  mobilePage28 // Last page from mobile
 ];
 
 export default function ReadingPage({ book }: ReadingPageProps) {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(0);
-  const totalPages = storyPages.length;
+  const [isMobile, setIsMobile] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
   const touchStartX = useRef<number | null>(null);
   const touchEndX = useRef<number | null>(null);
+  const imageContainerRef = useRef<HTMLDivElement>(null);
 
   // Minimum swipe distance (in pixels)
   const minSwipeDistance = 50;
 
+  // Detect if mobile view
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 640); // sm breakpoint
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Use appropriate pages based on screen size
+  const storyPages = isMobile ? mobilePages : webPages;
+  const totalPages = storyPages.length;
+
+  // Reset page when switching between mobile/web views
+  useEffect(() => {
+    if (currentPage >= totalPages) {
+      setCurrentPage(0);
+    }
+  }, [isMobile, totalPages, currentPage]);
+
   const goToNextPage = useCallback(() => {
     setCurrentPage((prev) => {
-      if (prev < totalPages - 1) {
+      const pages = isMobile ? mobilePages : webPages;
+      if (prev < pages.length - 1) {
         return prev + 1;
       }
       return prev;
     });
-  }, [totalPages]);
+  }, [isMobile]);
 
   const goToPreviousPage = useCallback(() => {
     setCurrentPage((prev) => {
@@ -73,9 +120,32 @@ export default function ReadingPage({ book }: ReadingPageProps) {
     });
   }, []);
 
+  // Fullscreen functionality
+  const toggleFullscreen = useCallback(async () => {
+    if (!imageContainerRef.current) return;
+
+    try {
+      if (!document.fullscreenElement) {
+        await imageContainerRef.current.requestFullscreen();
+        setIsFullscreen(true);
+      } else {
+        await document.exitFullscreen();
+        setIsFullscreen(false);
+      }
+    } catch (error) {
+      console.error('Error toggling fullscreen:', error);
+    }
+  }, []);
+
   // Keyboard navigation
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
+      // Exit fullscreen with ESC key
+      if (e.key === 'Escape' && isFullscreen) {
+        toggleFullscreen();
+        return;
+      }
+      
       if (e.key === 'ArrowLeft') {
         goToPreviousPage();
       } else if (e.key === 'ArrowRight') {
@@ -83,13 +153,24 @@ export default function ReadingPage({ book }: ReadingPageProps) {
       } else if (e.key === 'Home') {
         setCurrentPage(0);
       } else if (e.key === 'End') {
-        setCurrentPage(totalPages - 1);
+        const pages = isMobile ? mobilePages : webPages;
+        setCurrentPage(pages.length - 1);
       }
     };
 
     window.addEventListener('keydown', handleKeyPress);
     return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [totalPages, goToNextPage, goToPreviousPage]);
+  }, [isMobile, goToNextPage, goToPreviousPage, isFullscreen, toggleFullscreen]);
+
+  // Listen for fullscreen changes
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
+  }, []);
 
   // Touch handlers for swipe
   const onTouchStart = (e: React.TouchEvent) => {
@@ -150,18 +231,40 @@ export default function ReadingPage({ book }: ReadingPageProps) {
         <div className="flex flex-col items-center gap-6">
           {/* Page Image */}
           <div 
-            className="w-full max-w-full sm:max-w-md"
+            ref={imageContainerRef}
+            className={`w-full ${
+              isMobile 
+                ? 'max-w-full' 
+                : (currentPage === 0 || currentPage === webPages.length - 1)
+                  ? 'max-w-sm' 
+                  : 'max-w-3xl'
+            } ${isFullscreen ? 'bg-black flex items-center justify-center p-4' : ''}`}
+            style={isFullscreen ? { width: '100vw', height: '100vh' } : {}}
             onTouchStart={onTouchStart}
             onTouchMove={onTouchMove}
             onTouchEnd={onTouchEnd}
           >
-            <div className="relative bg-white rounded-lg shadow-2xl overflow-hidden border-4 border-yellow-200/50">
+            <div className={`relative bg-white rounded-lg shadow-2xl overflow-hidden border-4 border-yellow-200/50 ${isFullscreen ? 'w-full h-full flex items-center justify-center' : ''}`}>
               <img
                 src={storyPages[currentPage]}
                 alt={`Page ${currentPage + 1}`}
-                className="w-full h-auto object-contain"
+                className={`${isFullscreen ? 'max-w-full max-h-full object-contain' : 'w-full h-auto object-contain'}`}
                 draggable={false}
               />
+              {/* Fullscreen Toggle Button */}
+              {!isMobile && (
+                <Button
+                  onClick={toggleFullscreen}
+                  className="absolute top-4 right-4 bg-black/50 hover:bg-black/70 text-white border-0 rounded-full p-2 h-10 w-10 z-10"
+                  aria-label={isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'}
+                >
+                  {isFullscreen ? (
+                    <Minimize className="h-5 w-5" />
+                  ) : (
+                    <Maximize className="h-5 w-5" />
+                  )}
+                </Button>
+              )}
             </div>
           </div>
 
